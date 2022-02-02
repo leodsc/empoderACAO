@@ -21,9 +21,7 @@ public class Usuario {
 		return this.sexo;
 	}
 	
-	public void estados() {
-		switch(this.estado) {
-		// terminar switch
-		}
+	public String getEstado() {
+		return this.estado;
 	}
 }
