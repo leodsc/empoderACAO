@@ -24,4 +24,8 @@ public class Usuario {
 	public String getEstado() {
 		return this.estado;
 	}
+	
+	public int getIdade() {
+		return this.idade;
+	}
 }

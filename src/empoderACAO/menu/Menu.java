@@ -1,18 +1,24 @@
 package empoderACAO.menu;
 
-import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Menu {
 	char decisao;
 	private Scanner sc = new Scanner(System.in);
 	private HashMap<String, String> listaHospitais = Dados.construirHash();
 
-	public void comeco() {
+	public void comeco() throws IOException {
 
-		System.out.println("===========================");
-		System.out.println("\tEMPODERACAO");
-		System.out.println("===========================");
+		try {
+			Dados.carregar();
+		} catch (FileNotFoundException e) {
+			Dados.criarBanco();
+		}
+		mostrarLogo();
 		
 		System.out.println("Olá, vamos nos conectar.");
 		System.out.println("Você aceita o nosso termo?");
@@ -26,27 +32,45 @@ public class Menu {
 		sc.nextLine(); // comer o caracter '\n'
 
 		if (decisao == 'S' || decisao == 's') {
-			System.out.printf("Digite a sua idade: ");
-			int idade = sc.nextInt();
+			int idade = 0;
+			char sexo = 'a';
+			String nome = "l";
+			String estado = "l";
+
+			try {
+				System.out.printf("Digite a sua idade: ");
+				idade = sc.nextInt();
+			} catch (InputMismatchException e) {
+				terminarPrograma("Apenas números são aceitos nesse campo!");
+			}
 
 			if (idade < 18) {
 				terminarPrograma("menor de 18 anos");
 			}
 
 			System.out.printf("Digite o seu sexo:\n Digite M para masculino ou F para feminino ");
-			char sexo = sc.next().charAt(0);
+
+			try {
+				sexo = sc.next().charAt(0);
+			} catch(InputMismatchException e) {
+				terminarPrograma("Apenas UMA letra é aceita nesse campo!");
+			}
 			
-			if (sexo == 'M') {
+			if (sexo != 'M') {
 				terminarPrograma("você é homem, rs"); // ARRUMAR
 			}
-
-			System.out.printf("Digite o seu nome: ");
-			String nome = sc.nextLine();
-			sc.nextLine();
-			System.out.printf("Digite o seu estado: ");
-			String estado = sc.nextLine();
+			
+			try {
+				System.out.printf("Digite o seu nome: ");
+				nome = sc.nextLine();
+				System.out.printf("Digite o seu estado: ");
+				estado = sc.nextLine();
+			} catch(InputMismatchException e) {
+				terminarPrograma("Apenas letras são aceitas nesses campos!");
+			}
 
 			Usuario usuario = new Usuario(nome, sexo, estado, idade);
+			Dados.registrar(usuario);
 			boolean deveProcurarHospital = fazerPerguntas();
 			if (deveProcurarHospital) {
 				mostrarHospitalMaisProximo(usuario);
@@ -80,6 +104,7 @@ public class Menu {
 	public void terminarPrograma(String motivo) {
 		System.out.println("Indique o nosso aplicativo para amigos ou parentes, "
 				+ "isso poderá mudar a vida de quem você ama.");
+		System.out.println("Total de pessoas que fizeram o teste: " + Dados.getBanco().size());
 		System.out.println("Programa fechando......... " + motivo);
 		System.exit(0);
 	}
@@ -88,5 +113,45 @@ public class Menu {
 		System.out.printf(usuario.getNome() + ", indicamos que procure o Hospital de referência no seu estado: ");
 		String estado = usuario.getEstado();
 		System.out.println(listaHospitais.get(estado));
+	}
+	
+	public void mostrarLogo() {
+			System.out.println("8 8888888888            ,8.       ,8.          8 888888888o       ,o888888o.     ");
+			System.out.println("8 8888                 ,888.     ,888.         8 8888    `88.  . 8888     `88.   ");
+			System.out.println("8 8888                .`8888.   .`8888.        8 8888     `88 ,8 8888       `8b  ");
+			System.out.println("8 8888               ,8.`8888. ,8.`8888.       8 8888     ,88 88 8888        `8b ");
+			System.out.println("8 888888888888      ,8'8.`8888,8^8.`8888.      8 8888.   ,88' 88 8888         88 ");
+			System.out.println("8 8888             ,8' `8.`8888' `8.`8888.     8 888888888P'  88 8888         88 ");
+			System.out.println("8 8888            ,8'   `8.`88'   `8.`8888.    8 8888         88 8888        ,8P ");
+			System.out.println("8 8888           ,8'     `8.`'     `8.`8888.   8 8888         `8 8888       ,8P  ");
+			System.out.println("8 8888          ,8'       `8        `8.`8888.  8 8888          ` 8888     ,88'   ");
+			System.out.println("8 888888888888 ,8'         `         `8.`8888. 8 8888             `8888888P'     ");
+			System.out.println();																
+			System.out.println("8 888888888o.      8 8888888888   8 888888888o.                                  ");
+			System.out.println("8 8888    `^888.   8 8888         8 8888    `88.                                 ");
+			System.out.println("8 8888        `88. 8 8888         8 8888     `88                                 ");
+			System.out.println("8 8888         `88 8 8888         8 8888     ,88                                 ");
+			System.out.println("8 8888          88 8 888888888888 8 8888.   ,88'                                 ");
+			System.out.println("8 8888          88 8 8888         8 888888888P'                                  ");
+			System.out.println("8 8888         ,88 8 8888         8 8888`8b                                      ");
+			System.out.println("8 8888        ,88' 8 8888         8 8888 `8b.                                    ");
+			System.out.println("8 8888    ,o88P'   8 8888         8 8888   `8b.                                  ");
+			System.out.println("8 888888888P'      8 888888888888 8 8888     `88.                                ");
+			System.out.println();								
+			System.out.println(".8.           ,o888888o.           .8.           ,o888888o.             ");
+			System.out.println(".888.         8888     `88.        .888.       . 8888     `88.           ");
+			System.out.println(":88888.     ,8 8888       `8.      :88888.     ,8 8888       `8b          ");
+			System.out.println(". `88888.    88 8888               . `88888.    88 8888        `8b         ");
+			System.out.println(".8. `88888.   88 8888              .8. `88888.   88 8888         88         ");
+			System.out.println(".8`8. `88888.  88 8888             .8`8. `88888.  88 8888         88         ");
+			System.out.println(".8' `8. `88888. 88 8888            .8' `8. `88888. 88 8888        ,8P         ");
+			System.out.println(".8'   `8. `88888.`8 8888       .8' .8'   `8. `88888.`8 8888       ,8P          ");
+			System.out.println(".888888888. `88888.  8888     ,88' .888888888. `88888.` 8888     ,88'           ");
+			System.out.println(".8'       `8. `88888.  `8888888P'  .8'       `8. `88888.  `8888888P'             ");
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
 	}
 }
