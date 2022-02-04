@@ -123,8 +123,10 @@ public class Menu {
 	 * Faz as 4 perguntas sobre o câncer para o usuário.
 	 *
 	 * @return true, se bem sucedido 
+	 * @throws InterruptedException 
 	 */
-	public boolean fazerPerguntas() {
+	public boolean fazerPerguntas() throws InterruptedException {
+		int i = 0;
 		String[] perguntas = new String[4];
 		perguntas[0] = "Teve algum caso na família de câncer de mama?[Digite 1 para \"SIM\" 2 para \"NÃO\"]";
 		perguntas[1] = "Você já fez o autoexame? [Digite 1 para \"SIM\" 2 para \"NÃO\"]";
@@ -135,6 +137,9 @@ public class Menu {
 			System.out.println(pergunta);
 			try {
 				int resposta = sc.nextInt();
+				if (resposta == 2 && i == 1) {
+					mostrarAutoExame();
+				}
 				if (resposta == 1) {
 					return true;
 				} else if (resposta > 2) {
@@ -143,6 +148,7 @@ public class Menu {
 			} catch(InputMismatchException e) {
 				terminarPrograma("Por favor, digite um valor válido.");
 			} 
+			i++;
 		}
 		return false;
 	}
@@ -168,20 +174,6 @@ public class Menu {
 	 */
 	public void mostrarHospitalMaisProximo(Usuario usuario) throws InterruptedException {
 		String estado = usuario.getEstado();
-		System.out.println("Você conhece o Auto Exame de Mamas? \n\nA recomendação atual para prevenção");
-		System.out.println("do Câncer de Mama é a realização do auto exame uma vez por mês, ");
-		Thread.sleep(4000);
-		System.out.println("assim você consegue reconhecer caso houver alguma diferença ou desconforto nos seus seios. \n");
-		System.out.println("Veja mais sobre como realizar o auto exame abaixo:\r\n");
-		Thread.sleep(5000);
-		System.out.println("- Em pé (pode ser durante o banho):\r\n");
-		System.out.println("- Levante seu braço esquerdo e apoie-o sobre a cabeça;\r\n");
-		System.out.println("- Com a mão direita esticada, examine a mama esquerda;\r\n");
-		System.out.println("- Divida o seio em faixas e analise devagar cada uma dessas faixas. ...\r\n");
-		System.out.println("- Sinta a mama;\r\n");
-		System.out.println("- Faça movimentos circulares, de cima para baixo;\r\n");
-		System.out.println("- Repita os movimentos na outra mama.\r\n");
-		Thread.sleep(15000);
 		System.out.println("Indicamos o " + listaHospitais.get(estado));
 		System.out.println("Agradecemos imensamente por ter usado nosso programa! \nEsperamos que juntos podermos ajudar quem amamos e prevenir os casos de Câncer de Mama no Brasil.\r\n");
 		terminarPrograma("");
@@ -209,5 +201,22 @@ public class Menu {
 		System.out.println();
 		System.out.println();
 		System.out.println();
+	}
+	
+	public void mostrarAutoExame() throws InterruptedException {
+		System.out.println("Você conhece o Auto Exame de Mamas? \n\nA recomendação atual para prevenção");
+		System.out.println("do Câncer de Mama é a realização do auto exame uma vez por mês, ");
+		Thread.sleep(4000);
+		System.out.println("assim você consegue reconhecer caso houver alguma diferença ou desconforto nos seus seios. \n");
+		System.out.println("Veja mais sobre como realizar o auto exame abaixo:\r\n");
+		Thread.sleep(5000);
+		System.out.println("- Em pé (pode ser durante o banho):\r\n");
+		System.out.println("- Levante seu braço esquerdo e apoie-o sobre a cabeça;\r\n");
+		System.out.println("- Com a mão direita esticada, examine a mama esquerda;\r\n");
+		System.out.println("- Divida o seio em faixas e analise devagar cada uma dessas faixas. ...\r\n");
+		System.out.println("- Sinta a mama;\r\n");
+		System.out.println("- Faça movimentos circulares, de cima para baixo;\r\n");
+		System.out.println("- Repita os movimentos na outra mama.\r\n");
+		Thread.sleep(15000);
 	}
 }

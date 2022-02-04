@@ -6,6 +6,8 @@ package empoderACAO.menu;
  */
 public class Usuario {
 	
+	private boolean fezAutoExame;
+	
 	/** Nome do usuário. */
 	private String nome;
 	
@@ -47,5 +49,9 @@ public class Usuario {
 	
 	public int getIdade() {
 		return this.idade;
+	}
+	
+	public void setFezAutoExame(boolean fezAutoExame) {
+		this.fezAutoExame = fezAutoExame;
 	}
 }
